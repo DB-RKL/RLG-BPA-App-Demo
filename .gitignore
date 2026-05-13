@@ -1,0 +1,26 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+node_modules/
+npm-debug.log*
+
+.idea/
+.vscode/
+*.swp
+
+.databricks/
+.cursor/
+
+.DS_Store
+
+# TypeScript build cache
+frontend/tsconfig.tsbuildinfo
+
+# Local Python pin (developer-specific)
+.python-version
+
+# Power BI report binaries (regenerable from sql/reporting_views.sql)
+*.pbix

@@ -1,0 +1,685 @@
+{
+  "datasets": [
+    {
+      "name": "portfolio",
+      "displayName": "Portfolio Overview",
+      "queryLines": [
+        "SELECT * FROM main.bpa_rubjit.vw_portfolio_overview"
+      ]
+    },
+    {
+      "name": "fields",
+      "displayName": "Field Detail",
+      "queryLines": [
+        "SELECT * FROM main.bpa_rubjit.vw_field_detail"
+      ]
+    },
+    {
+      "name": "category",
+      "displayName": "Category Completeness",
+      "queryLines": [
+        "SELECT * FROM main.bpa_rubjit.vw_category_summary"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "acd0abe0",
+      "displayName": "Overview",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layout": [
+        {
+          "widget": {
+            "name": "06f9c850",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "plans_approved",
+                      "expression": "COUNT(`document_id`)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "plans_approved",
+                  "displayName": "Plans approved"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Plans approved"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "0f9b4dea",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "customers_covered",
+                      "expression": "COUNT(DISTINCT `customer`)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "customers_covered",
+                  "displayName": "Customers covered"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Customers covered"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "8dafede3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "fields_approved",
+                      "expression": "SUM(`approved_fields`)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "fields_approved",
+                  "displayName": "Fields approved"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Fields approved"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "01a9283c",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "avg_confidence_pct",
+                      "expression": "ROUND(AVG(`avg_confidence`) * 100, 1)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg_confidence_pct",
+                  "displayName": "Avg extraction confidence (%)"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Avg extraction confidence (%)"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "b4a78090",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "accuracy_pct",
+                      "expression": "ROUND(AVG(`extraction_accuracy`), 1)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "accuracy_pct",
+                  "displayName": "AI extraction accuracy (%)"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "AI extraction accuracy (%)"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 3,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "145b7244",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "fields_changed",
+                      "expression": "SUM(`fields_changed`)"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "fields_changed",
+                  "displayName": "Fields changed in review"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Fields changed in review"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 3,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "efe2ec2b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "week(upload_time)",
+                      "expression": "DATE_TRUNC(\"WEEK\", `upload_time`)"
+                    },
+                    {
+                      "name": "count(document_id)",
+                      "expression": "COUNT(`document_id`)"
+                    },
+                    {
+                      "name": "confidence_band",
+                      "expression": "`confidence_band`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "week(upload_time)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "upload_time"
+                },
+                "y": {
+                  "fieldName": "count(document_id)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "COUNT of document_id"
+                },
+                "color": {
+                  "fieldName": "confidence_band",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "confidence_band"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Plans approved per week"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 4,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "402e18e9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "confidence_band",
+                      "expression": "`confidence_band`"
+                    },
+                    {
+                      "name": "count(document_id)",
+                      "expression": "COUNT(`document_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "confidence_band",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "confidence_band"
+                },
+                "y": {
+                  "fieldName": "count(document_id)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "COUNT of document_id"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Confidence distribution"
+              },
+              "mark": {
+                "colors": [
+                  "#450350",
+                  "#8A4C91",
+                  "#C6A3CE"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 6,
+            "width": 2,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "f4c099df",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "customer",
+                      "expression": "`customer`"
+                    },
+                    {
+                      "name": "count(document_id)",
+                      "expression": "COUNT(`document_id`)"
+                    },
+                    {
+                      "name": "confidence_band",
+                      "expression": "`confidence_band`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "customer",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "customer"
+                },
+                "y": {
+                  "fieldName": "count(document_id)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "COUNT of document_id"
+                },
+                "label": {
+                  "show": true
+                },
+                "color": {
+                  "fieldName": "confidence_band",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "confidence_band"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Plans per customer"
+              },
+              "mark": {
+                "colors": [
+                  "#450350",
+                  "#8A4C91",
+                  "#C6A3CE",
+                  "#FFAB00",
+                  "#00A972",
+                  "#8BCAE7"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "b9797549",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "portfolio",
+                  "fields": [
+                    {
+                      "name": "customer",
+                      "expression": "`customer`"
+                    },
+                    {
+                      "name": "avg(extraction_accuracy)",
+                      "expression": "AVG(`extraction_accuracy`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "customer",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "customer"
+                },
+                "y": {
+                  "fieldName": "avg(extraction_accuracy)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "AVG of extraction_accuracy"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Extraction accuracy by customer (%)"
+              },
+              "mark": {
+                "colors": [
+                  "#450350"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 11,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "b7772fbd",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fields",
+                  "fields": [
+                    {
+                      "name": "category_label",
+                      "expression": "`category_label`"
+                    },
+                    {
+                      "name": "avg(was_changed_in_review)",
+                      "expression": "AVG(`was_changed_in_review`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "category_label"
+                },
+                "y": {
+                  "fieldName": "avg(was_changed_in_review)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "AVG of was_changed_in_review"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Review edit rate by category"
+              },
+              "mark": {
+                "colors": [
+                  "#FFAB00"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 16,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "653f1c43",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "category",
+                  "fields": [
+                    {
+                      "name": "category_label",
+                      "expression": "`category_label`"
+                    },
+                    {
+                      "name": "avg(pct_complete)",
+                      "expression": "AVG(`pct_complete`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category_label",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "category_label"
+                },
+                "y": {
+                  "fieldName": "avg(pct_complete)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "AVG of pct_complete"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Category completeness (%)"
+              },
+              "mark": {
+                "colors": [
+                  "#00A972"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 16,
+            "width": 3,
+            "height": 5
+          }
+        }
+      ]
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

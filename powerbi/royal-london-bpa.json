@@ -1,0 +1,88 @@
+{
+  "name": "Royal London BPA",
+  "dataColors": [
+    "#460053",
+    "#056970",
+    "#e9c176",
+    "#9fecf4",
+    "#ba1a1a",
+    "#874391",
+    "#86d3da",
+    "#ffdea5"
+  ],
+  "background": "#f9f9f9",
+  "foreground": "#1a1c1c",
+  "tableAccent": "#460053",
+  "good": "#056970",
+  "neutral": "#e9c176",
+  "bad": "#ba1a1a",
+  "maximum": "#460053",
+  "center": "#e9c176",
+  "minimum": "#f9f9f9",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "general": [
+          {
+            "responsive": true,
+            "keepLayerOrder": true
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#1a1c1c"
+              }
+            },
+            "fontFamily": "Segoe UI Semibold",
+            "fontSize": 12
+          }
+        ],
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#ffffff"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#1a1c1c"
+              }
+            },
+            "position": "Outer",
+            "preset": "BottomRight",
+            "transparency": 95
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#f9f9f9"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

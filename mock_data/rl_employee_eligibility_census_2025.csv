@@ -1,0 +1,13 @@
+Employee ID,Full Name,Date of Birth,Gender,Start Date,Grade,Department,Annual Salary (GBP),Group Life,Income Protection,Pension,Critical Illness,Dental & Optical,Salary Sacrifice
+EMP-10021,Sarah Thompson,15/03/1985,F,01/09/2018,7,Finance,72000,Yes,Yes,Yes – 8%,Yes,Yes,Yes
+EMP-10034,James O'Brien,22/11/1990,M,15/01/2020,5,IT,55000,Yes,Yes,Yes – 5%,Yes,No,Yes
+EMP-10042,Priya Patel,08/07/1978,F,01/04/2015,9,Legal,95000,Yes,Yes,Yes – 10%,Yes,Yes,Yes
+EMP-10055,David Williams,30/01/1992,M,10/06/2021,4,Operations,42000,Yes,Yes,Yes – 5%,No,Yes,No
+EMP-10061,Fatima Khan,14/09/1988,F,01/03/2019,6,Marketing,58000,Yes,Yes,Yes – 5%,Yes,Yes,Yes
+EMP-10078,Robert Chen,25/04/1982,M,15/08/2016,8,Engineering,85000,Yes,Yes,Yes – 8%,Yes,No,Yes
+EMP-10083,Emma Richardson,12/12/1995,F,01/07/2022,3,HR,38000,Yes,No,Yes – 3%,No,Yes,No
+EMP-10096,Michael Okafor,19/06/1987,M,15/11/2017,7,Risk,70000,Yes,Yes,Yes – 8%,Yes,Yes,Yes
+EMP-10104,Charlotte Hughes,03/02/1980,F,01/01/2014,10,Exec,120000,Yes,Yes,Yes – 15%,Yes,Yes,Yes
+EMP-10112,Arjun Singh,27/08/1993,M,01/10/2023,2,Customer Service,32000,Yes,No,Yes – 3%,No,No,No
+EMP-10125,Laura McGregor,11/05/1984,F,15/03/2016,8,Compliance,82000,Yes,Yes,Yes – 8%,Yes,Yes,Yes
+EMP-10131,Thomas Brown,29/10/1991,M,01/09/2020,5,Sales,52000,Yes,Yes,Yes – 5%,Yes,Yes,No
