@@ -18,7 +18,7 @@ minutes, with full lineage*.
 
 | Stage | Databricks primitive | Where it is in this repo / workspace | Evidence |
 |-------|---------------------|--------------------------------------|----------|
-| **Ingest (Lakeflow-style)** | Unity Catalog **Volume** — governed file landing | `/Volumes/serverless_stable_wx20co_catalog/bpa_rubjit/documents/<customer>/` (72 files, 6 schemes) | `01_ingest_extract_run.md` |
+| **Ingest (Lakeflow)** | **Lakeflow Declarative Pipeline** + **Auto Loader** (`cloudFiles`) — incremental, checkpointed, into `bronze_documents` | pipeline `8c2f4acb-…`, `lakeflow/bronze_documents_pipeline.py`; source = UC Volume `/Volumes/…/bpa_rubjit/documents/<scheme>/` | `06_lakeflow_ingest.md`, `01_ingest_extract_run.md` |
 | **Govern** | **Unity Catalog** — schema, volume, Delta tables, views, grants | `serverless_stable_wx20co_catalog.bpa_rubjit` | `03_delta_governed_tables.md`, `05_deploy_and_resources.md` |
 | **Serve (operational)** | **Lakebase** Postgres — live document/field state | instance `rlg-lakebase`, tables `documents` + `extracted_fields` | `01_ingest_extract_run.md`, `05_deploy_and_resources.md` |
 | **Intelligent (GenAI)** | **`ai_parse_document`** + **`ai_extract`** on a serverless SQL warehouse | `server/routes/ai_sql.py` | `02_ai_extract_sample.md` |
@@ -33,7 +33,10 @@ minutes, with full lineage*.
 
 ## What ran (summary)
 
-- 72 documents uploaded to the UC Volume across 6 pension-scheme prospects.
+- 72 documents uploaded to the UC Volume across 6 pension-scheme prospects; a **Lakeflow
+  Declarative Pipeline (Auto Loader)** incrementally ingested them into `bronze_documents`,
+  then picked up **only** a new scheme's 4 files on a second run (76 rows, 7 schemes) — proving
+  checkpointed incremental cloud ingestion, not a batch re-read.
 - 16 documents ingested through the deployed app (`ai_parse_document` on PDFs, native parsers
   on DOCX/XLSX/CSV), `ai_extract` producing 251 structured fields, then reviewed & approved.
 - Approval synced 16 summary rows + 251 detail rows into governed Delta tables.
