@@ -8,14 +8,22 @@ Presenter: Solution Architecture · Built on Databricks (Unity Catalog · Lakeba
 
 ## Slide 1 — The outcome, up front
 
-**Today:** an actuary spends **days per scheme** transcribing ~40 structured fields out of
-PDFs, Excel, Word and CSV packs before any pricing judgement can begin.
+**Today:** an actuary spends **~1.5–2 days per scheme** transcribing ~40 structured fields out
+of PDFs, Excel, Word and CSV packs before any pricing judgement can begin.
 
 **With this build:** the same scheme is **document-to-structured-data in minutes**, with a
 one-click audit trail — the actuary *reviews and signs off* instead of *re-keying*.
 
+### The number
+**~1.5 actuarial days saved per scheme.** At ~150 schemes quoted a year, that is **~225 days —
+roughly £150k of actuarial time a year** redeployed from re-keying to pricing. The larger prize
+is **win rate**: quoting more schemes inside the exclusivity window.
+
 > The bottleneck moves from **data entry** to **pricing judgement** — where you want your
 > actuaries spending their day.
+
+*(Estimate. Assumes ~1.5 days saved/scheme, ~150 schemes/year, ~£700 fully-loaded actuarial
+day. Validate against Royal London's own volumes in the pilot.)*
 
 ---
 
@@ -35,7 +43,8 @@ growing the team linearly with deal flow.
 
 ## Slide 3 — What we built (one integrated journey)
 
-A single governed pipeline on Databricks — no bolt-on LLM, no per-template parser:
+**Raw scheme docs → UC Volume → `ai_parse`/`ai_extract` → Lakebase → Delta (Unity Catalog) →
+Genie + Lakeview → Databricks App.** One flow, one catalog, one audit trail — not stitched-together demos.
 
 1. **Ingest** — scheme documents land in a **Unity Catalog Volume** (governed, audited).
 2. **Extract** — **`ai_parse_document`** + **`ai_extract`** turn any format into structured,
@@ -45,6 +54,8 @@ A single governed pipeline on Databricks — no bolt-on LLM, no per-template par
 5. **Govern** — approval syncs to **Delta tables** in Unity Catalog (lineage + time travel).
 6. **Consume** — **AI/BI Lakeview dashboard**, **Genie** (governed text-to-SQL), Power BI —
    all on the *same* tables. Surfaced in one **Databricks App**.
+
+*The same field flows from the source page through to the dashboard number with its lineage intact.*
 
 ---
 
@@ -88,7 +99,33 @@ A single governed pipeline on Databricks — no bolt-on LLM, no per-template par
 
 ---
 
-## Slide 7 — Proof it runs (this is not a mock-up)
+## Slide 7 — Decisions & trade-offs
+
+| Decision | Why | Trade-off we accepted |
+|---|---|---|
+| **`ai_extract` SQL functions**, not a custom LLM integration | Data stays in Unity Catalog; no prompt to maintain; model upgrades ship with the platform | Less control over the exact prompt — fine for a regulated team that values governance over tuning |
+| **Field list keyed to document kind** | Keeps the review screen high-signal | More schemas to define up front |
+| **Lakebase for live state, Delta for the record of truth** | Review needs row-level updates; audit needs lineage + time travel | Two stores to keep in sync (handled by one sync-on-approve step) |
+| **Human approval gate kept in the middle** | The AI is fast; the actuary stays accountable | Not fully "hands-off" — by design, for sign-off |
+| **Reused an existing warehouse + Lakebase instance** | No new compute to stand up | Shared capacity, acceptable for a demo/pilot |
+
+---
+
+## Slide 8 — How we built it (AI as a force multiplier)
+
+- **Built with Claude Code** driving the Databricks CLI, SQL, and app deploy end-to-end —
+  provisioning, extraction pipeline, dashboard, Genie space, and the workflow run.
+- **The extraction is itself AI** — Databricks `ai_parse_document` + `ai_extract`, so there is
+  no bespoke parser or prompt to maintain.
+- **Pattern that worked:** let the model handle the mechanical span (retarget config, generate
+  DDL, drive the HTTP workflow, harvest evidence) while decisions — model choice, the human
+  approval gate, live-vs-Delta split — stayed explicit and reviewed.
+- **Result:** a retarget-and-deploy of a full six-stage journey into a new workspace, with
+  committed run evidence, in a single working session.
+
+---
+
+## Slide 9 — Proof it runs (this is not a mock-up)
 
 Executed end-to-end in a Databricks workspace on 2026-09-23 (see `evidence/` in the repo):
 
@@ -103,7 +140,7 @@ Executed end-to-end in a Databricks workspace on 2026-09-23 (see `evidence/` in 
 
 ---
 
-## Slide 8 — The platform story (one slide the platform team keeps)
+## Slide 10 — The platform story (one slide the platform team keeps)
 
 | What the business saw | The Databricks primitive |
 |---|---|
@@ -118,7 +155,7 @@ Executed end-to-end in a Databricks workspace on 2026-09-23 (see `evidence/` in 
 
 ---
 
-## Slide 9 — Where this goes next
+## Slide 11 — Where this goes next
 
 The same pattern applies well beyond BPA — anywhere a regulated team reads unstructured
 documents and re-keys into a master workbook:
@@ -131,7 +168,7 @@ documents and re-keys into a master workbook:
 
 ---
 
-## Slide 10 — The ask
+## Slide 12 — The ask
 
 **Run one real scheme through this flow on your own documents in a 2-week paid pilot.**
 
@@ -141,3 +178,21 @@ documents and re-keys into a master workbook:
 - Success criteria agreed up front, in your KPIs.
 
 *Live build:* `https://rlg-demo-7474653316213627.aws.databricksapps.com`
+
+---
+
+## Slide 13 — Appendix: objection handling
+
+**Business stakeholder (pricing / actuarial head)**
+- *"Can we trust the AI?"* — Nothing is priced on an unreviewed field. Every value has a
+  confidence score, an editable review step, and a named approver in the audit trail.
+- *"What about the schemes it gets wrong?"* — The confidence score surfaces exactly those for
+  closer review; the actuary's time goes to the hard 10%, not the easy 90%.
+
+**Technical stakeholder (platform / data)**
+- *"Is our data leaving the platform?"* — No. Extraction is a SQL function inside Unity
+  Catalog, in your VPC. No outbound API call.
+- *"What do we have to maintain?"* — No parser per template, no prompt. `ai_extract` is managed;
+  upgrades ship with the platform. The only bespoke code is the review app and the field lists.
+- *"How does this govern access?"* — One catalog, one identity. Genie and the dashboard inherit
+  Unity Catalog permissions; the app runs as a service principal with scoped grants.
