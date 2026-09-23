@@ -12,22 +12,26 @@ env:
   - name: SERVING_ENDPOINT
     value: databricks-claude-sonnet-4-5
   - name: DATABRICKS_WAREHOUSE_ID
-    value: "c28b7d217c320d9a"
+    value: "ced20c73f16a2915"
   - name: BPA_CATALOG
-    value: "serverless_stable_n047pw_catalog"
+    value: "serverless_stable_wx20co_catalog"
   - name: BPA_SCHEMA
     value: "bpa_rubjit"
   - name: BPA_VOLUME
     value: "documents"
-  # Lakeview dashboard / Genie space / Power BI URLs were provisioned on the
-  # original demo workspace and are not present in this FE-VM. Leaving the
-  # vars unset makes the BI tabs degrade gracefully (the app shows a "not
-  # configured" placeholder instead of an empty iframe).
+  # Lakeview dashboard and Genie space are provisioned during deployment;
+  # their URLs/IDs are filled in below once created (see scripts/deploy_dashboard.py
+  # and the Genie space setup). Power BI stays unset and degrades gracefully
+  # to a "not configured" placeholder.
+  - name: DATABRICKS_DASHBOARD_URL
+    value: "https://fevm-serverless-stable-wx20co.cloud.databricks.com/embed/dashboardsv3/01f1b72a2a1d100fb06e1284b208e373"
+  - name: DATABRICKS_GENIE_SPACE_ID
+    value: "01f1b729d86f1055b77bac0c71294adc"
 
 resources:
   - name: database
     database:
-      instance_name: bpa-lakebase
+      instance_name: rlg-lakebase
       database_name: databricks_postgres
       permission: CAN_CONNECT_AND_CREATE
   - name: serving-endpoint

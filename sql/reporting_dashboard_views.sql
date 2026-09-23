@@ -1,11 +1,11 @@
 -- AI/BI Reporting Dashboard support view
--- Target: main.bpa_rubjit on Databricks SQL Warehouse e9b34f7a2e4b0561
+-- Target: serverless_stable_wx20co_catalog.bpa_rubjit on Databricks SQL Warehouse ced20c73f16a2915
 --
 -- vw_portfolio_overview joins vw_plan_overview + vw_extraction_quality and
 -- derives `customer` from filename prefix so every dashboard widget shares
 -- the same customer mapping.
 
-CREATE OR REPLACE VIEW main.bpa_rubjit.vw_portfolio_overview AS
+CREATE OR REPLACE VIEW serverless_stable_wx20co_catalog.bpa_rubjit.vw_portfolio_overview AS
 SELECT
   p.document_id,
   p.filename,
@@ -50,6 +50,6 @@ SELECT
     WHEN p.filename ILIKE 'rsm_uk%'             THEN 'rsm_uk'
     ELSE 'other'
   END                                          AS customer_slug
-FROM main.bpa_rubjit.vw_plan_overview p
-LEFT JOIN main.bpa_rubjit.vw_extraction_quality q
+FROM serverless_stable_wx20co_catalog.bpa_rubjit.vw_plan_overview p
+LEFT JOIN serverless_stable_wx20co_catalog.bpa_rubjit.vw_extraction_quality q
   ON p.document_id = q.document_id;

@@ -22,7 +22,7 @@ import aiohttp
 from ..config import get_oauth_token, get_workspace_host
 
 
-WAREHOUSE_ID = os.environ.get("DATABRICKS_WAREHOUSE_ID", "e9b34f7a2e4b0561")
+WAREHOUSE_ID = os.environ.get("DATABRICKS_WAREHOUSE_ID", "ced20c73f16a2915")
 
 
 def _escape_sql(value: str) -> str:
