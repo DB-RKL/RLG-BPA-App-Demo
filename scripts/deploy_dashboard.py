@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -22,10 +23,13 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 DASHBOARD_JSON = REPO / "dashboards" / "bpa_reporting.lvdash.json"
 DASHBOARD_ID_FILE = REPO / "dashboards" / "bpa_reporting.dashboard_id"
+# vw_portfolio_overview (in reporting_dashboard_views.sql) depends on the base
+# views in powerbi_views.sql, so both files are run in order.
+BASE_VIEW_SQL = REPO / "sql" / "powerbi_views.sql"
 VIEW_SQL = REPO / "sql" / "reporting_dashboard_views.sql"
 
 DISPLAY_NAME = "BPA Portfolio Insights"
-WAREHOUSE_ID = "e9b34f7a2e4b0561"
+WAREHOUSE_ID = "ced20c73f16a2915"
 PARENT_PATH = "/Workspace/Users/rubjit.lalli@databricks.com"
 
 
@@ -47,7 +51,7 @@ def _client(profile: str | None):
     from databricks.sdk.config import Config
 
     if profile:
-        cli = "/opt/homebrew/bin/databricks"
+        cli = shutil.which("databricks") or "/opt/homebrew/bin/databricks"
         env = os.environ.copy()
         env["DATABRICKS_CLI_DO_NOT_EXECUTE_NEWER_VERSION"] = "1"
         host_result = subprocess.run(
@@ -74,19 +78,26 @@ def _client(profile: str | None):
     return WorkspaceClient()
 
 
+def _split_statements(sql: str) -> list[str]:
+    return [s.strip() for s in sql.split(";") if s.strip() and not s.strip().startswith("--")]
+
+
 def run_view_ddl(client) -> None:
-    ddl = VIEW_SQL.read_text()
-    print(f"[1/4] Running {VIEW_SQL.name} on warehouse {WAREHOUSE_ID}")
-    resp = client.statement_execution.execute_statement(
-        statement=ddl,
-        warehouse_id=WAREHOUSE_ID,
-        wait_timeout="30s",
-    )
-    state = getattr(resp.status, "state", None) if resp.status else None
-    print(f"       -> state={state}")
-    if state and str(state).upper() not in {"SUCCEEDED", "STATEMENTSTATE.SUCCEEDED"}:
-        err = getattr(resp.status, "error", None)
-        raise SystemExit(f"DDL failed: {err}")
+    # The Statement Execution API runs one statement per call, so we split each
+    # file and run the base views (powerbi_views.sql) before the dashboard view.
+    for path in (BASE_VIEW_SQL, VIEW_SQL):
+        print(f"[1/4] Running {path.name} on warehouse {WAREHOUSE_ID}")
+        for stmt in _split_statements(path.read_text()):
+            resp = client.statement_execution.execute_statement(
+                statement=stmt,
+                warehouse_id=WAREHOUSE_ID,
+                wait_timeout="30s",
+            )
+            state = getattr(resp.status, "state", None) if resp.status else None
+            if state and str(state).upper() not in {"SUCCEEDED", "STATEMENTSTATE.SUCCEEDED"}:
+                err = getattr(resp.status, "error", None)
+                raise SystemExit(f"DDL failed: {err}\n  stmt: {stmt[:160]}")
+    print("       -> views created")
 
 
 def load_cached_id() -> str | None:

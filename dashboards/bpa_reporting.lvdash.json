@@ -4,21 +4,21 @@
       "name": "portfolio",
       "displayName": "Portfolio Overview",
       "queryLines": [
-        "SELECT * FROM main.bpa_rubjit.vw_portfolio_overview"
+        "SELECT * FROM serverless_stable_wx20co_catalog.bpa_rubjit.vw_portfolio_overview"
       ]
     },
     {
       "name": "fields",
       "displayName": "Field Detail",
       "queryLines": [
-        "SELECT * FROM main.bpa_rubjit.vw_field_detail"
+        "SELECT * FROM serverless_stable_wx20co_catalog.bpa_rubjit.vw_field_detail"
       ]
     },
     {
       "name": "category",
       "displayName": "Category Completeness",
       "queryLines": [
-        "SELECT * FROM main.bpa_rubjit.vw_category_summary"
+        "SELECT * FROM serverless_stable_wx20co_catalog.bpa_rubjit.vw_category_summary"
       ]
     }
   ],

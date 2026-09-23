@@ -13,7 +13,7 @@ router = APIRouter(tags=["sync"])
 
 CATALOG = os.environ.get("BPA_CATALOG", "main")
 SCHEMA = os.environ.get("BPA_SCHEMA", "bpa_rubjit")
-WAREHOUSE_ID = os.environ.get("DATABRICKS_WAREHOUSE_ID", "e9b34f7a2e4b0561")
+WAREHOUSE_ID = os.environ.get("DATABRICKS_WAREHOUSE_ID", "ced20c73f16a2915")
 
 FIELD_PIVOTS = [
     ("Scheme Name", "scheme_name"),

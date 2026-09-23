@@ -1,5 +1,5 @@
 -- Power BI Reporting Views for BPA
--- Target: main.bpa_rubjit on Databricks SQL Warehouse e9b34f7a2e4b0561
+-- Target: serverless_stable_wx20co_catalog.bpa_rubjit on Databricks SQL Warehouse ced20c73f16a2915
 -- Run each statement separately against the warehouse.
 
 -- ============================================================
@@ -7,7 +7,7 @@
 -- One row per approved document with clean column aliases,
 -- computed flags, and human-readable labels.
 -- ============================================================
-CREATE OR REPLACE VIEW main.bpa_rubjit.vw_plan_overview AS
+CREATE OR REPLACE VIEW serverless_stable_wx20co_catalog.bpa_rubjit.vw_plan_overview AS
 SELECT
   document_id,
   filename,
@@ -37,7 +37,7 @@ SELECT
     WHEN avg_confidence >= 0.5 THEN 'Medium'
     ELSE 'Low'
   END                                                    AS confidence_band
-FROM main.bpa_rubjit.benefit_plans_summary;
+FROM serverless_stable_wx20co_catalog.bpa_rubjit.benefit_plans_summary;
 
 
 -- ============================================================
@@ -45,7 +45,7 @@ FROM main.bpa_rubjit.benefit_plans_summary;
 -- One row per extracted field with a numeric confidence score,
 -- human-readable category labels, and change detection.
 -- ============================================================
-CREATE OR REPLACE VIEW main.bpa_rubjit.vw_field_detail AS
+CREATE OR REPLACE VIEW serverless_stable_wx20co_catalog.bpa_rubjit.vw_field_detail AS
 SELECT
   document_id,
   filename,
@@ -79,7 +79,7 @@ SELECT
      AND reviewed_value <> extracted_value THEN TRUE
     ELSE FALSE
   END                                                    AS was_changed_in_review
-FROM main.bpa_rubjit.benefit_plans_detail;
+FROM serverless_stable_wx20co_catalog.bpa_rubjit.benefit_plans_detail;
 
 
 -- ============================================================
@@ -87,7 +87,7 @@ FROM main.bpa_rubjit.benefit_plans_detail;
 -- Aggregated quality metrics per document: confidence
 -- distribution, approval rate, and change rate.
 -- ============================================================
-CREATE OR REPLACE VIEW main.bpa_rubjit.vw_extraction_quality AS
+CREATE OR REPLACE VIEW serverless_stable_wx20co_catalog.bpa_rubjit.vw_extraction_quality AS
 SELECT
   d.document_id,
   d.filename,
@@ -119,8 +119,8 @@ SELECT
        AND f.reviewed_value <> f.extracted_value THEN 1
     END)) * 100.0 / NULLIF(d.total_fields, 0), 1
   )                                                                 AS extraction_accuracy
-FROM main.bpa_rubjit.benefit_plans_summary d
-LEFT JOIN main.bpa_rubjit.benefit_plans_detail f
+FROM serverless_stable_wx20co_catalog.bpa_rubjit.benefit_plans_summary d
+LEFT JOIN serverless_stable_wx20co_catalog.bpa_rubjit.benefit_plans_detail f
   ON d.document_id = f.document_id
 GROUP BY
   d.document_id, d.filename, d.upload_time, d.scheme_name,
@@ -132,7 +132,7 @@ GROUP BY
 -- Completeness per document per category: how many fields
 -- were extracted vs how many are expected.
 -- ============================================================
-CREATE OR REPLACE VIEW main.bpa_rubjit.vw_category_summary AS
+CREATE OR REPLACE VIEW serverless_stable_wx20co_catalog.bpa_rubjit.vw_category_summary AS
 WITH expected_counts AS (
   SELECT 'scheme_info'    AS field_category, 8  AS expected_fields UNION ALL
   SELECT 'benefits',                          8  UNION ALL
@@ -156,7 +156,7 @@ actual AS (
       WHEN 'low'    THEN 0.3
       ELSE 0.5
     END), 2)                                                         AS avg_category_confidence
-  FROM main.bpa_rubjit.benefit_plans_detail
+  FROM serverless_stable_wx20co_catalog.bpa_rubjit.benefit_plans_detail
   GROUP BY document_id, filename, field_category
 )
 SELECT
