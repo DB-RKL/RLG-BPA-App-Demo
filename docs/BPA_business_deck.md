@@ -43,10 +43,13 @@ growing the team linearly with deal flow.
 
 ## Slide 3 — What we built (one integrated journey)
 
-**Raw scheme docs → UC Volume → `ai_parse`/`ai_extract` → Lakebase → Delta (Unity Catalog) →
-Genie + Lakeview → Databricks App.** One flow, one catalog, one audit trail — not stitched-together demos.
+**Raw scheme docs → UC Volume → Lakeflow (Auto Loader) → bronze Delta → `ai_parse`/`ai_extract`
+→ Lakebase → approved Delta (Unity Catalog) → Genie + Lakeview → Databricks App.** One flow,
+one catalog, one audit trail — not stitched-together demos.
 
-1. **Ingest** — scheme documents land in a **Unity Catalog Volume** (governed, audited).
+1. **Ingest** — scheme documents land in a **Unity Catalog Volume**; a **Lakeflow Declarative
+   Pipeline** (Auto Loader) incrementally catalogs each new pack into a governed `bronze_documents`
+   table as it arrives.
 2. **Extract** — **`ai_parse_document`** + **`ai_extract`** turn any format into structured,
    confidence-scored fields — *chosen per document kind*.
 3. **Serve** — results land in **Lakebase Postgres** for the live review workflow.
@@ -129,6 +132,9 @@ Genie + Lakeview → Databricks App.** One flow, one catalog, one audit trail �
 
 Executed end-to-end in a Databricks workspace on 2026-09-23 (see `evidence/` in the repo):
 
+- **Lakeflow incremental ingest proven:** a serverless Lakeflow pipeline (Auto Loader) ingested
+  72 files in run 1; a new scheme's pack was then dropped into the Volume and run 2 picked up
+  **only the 4 new files** (checkpointed) — 76 rows, 7 schemes in `bronze_documents`.
 - **72 documents** uploaded to the UC Volume across **6 pension-scheme prospects**.
 - **16 documents** ingested through the deployed app — `ai_parse_document` on PDFs, native
   parsers on DOCX/XLSX/CSV — producing **251 structured fields**, reviewed & approved.
@@ -144,7 +150,8 @@ Executed end-to-end in a Databricks workspace on 2026-09-23 (see `evidence/` in 
 
 | What the business saw | The Databricks primitive |
 |---|---|
-| PDF / Excel / Word / CSV ingestion | **Unity Catalog Volumes** — governed file storage |
+| PDF / Excel / Word / CSV landing | **Unity Catalog Volumes** — governed file storage |
+| Incremental document ingestion | **Lakeflow** Declarative Pipeline + **Auto Loader** — exactly-once, checkpointed |
 | Document parsing | **`ai_parse_document`** — managed SQL function |
 | Structured extraction | **`ai_extract`** — managed SQL function, no prompt engineering |
 | Operational store | **Lakebase Postgres** — real transactional workload |
